@@ -92,3 +92,5 @@ class IMailReplacer(Interface):
     default_from_name = TextLine(title=_(u"Full name of default sender",))
 
     review_state = TextLine(title=_(u"State of content",))
+    
+    getTexto = TextLine(title=_(u"Texto do conteudo",))
