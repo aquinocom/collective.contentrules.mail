@@ -158,3 +158,40 @@ class MailReplacer(object):
     @property
     def default_from_name(self):
         return self.portal.getProperty('email_from_name', 'Administrator')
+
+    @property
+    def getTexto(self):
+        pt = getToolByName(self.context, 'portal_transforms')
+        texto_plain_obj = pt.convertTo('text/plain', self.context.getText(), mimetype='text/html')
+        texto_plain = texto_plain_obj.getData().strip()
+        texto_cortado = self.limita_texto(texto_plain, 200)
+        return texto_cortado
+
+    def limita_texto(self,texto, tamanho_limite=10, tamanho_minimo=-1, reticencias=True):
+        '''
+        Se o texto está dentro do limite, retorne-o
+        Se o texto está fora dos limites corte palavras 
+        até estar dentro do limite, então retorne-o
+        Se o texto cortado pelas palavras fica menor que
+        tamanho_minimo, retorne essa palavra cortada
+        '''
+        if len(texto) <= tamanho_limite:
+            return texto
+        if reticencias:
+            tamanho_limite += -3
+        palavras = texto.split(" ")
+        texto_cortado=""
+        for palavra in palavras:
+            if len(texto_cortado) + len(palavra) >= tamanho_limite:
+                break
+            if texto_cortado != "":
+                texto_cortado+=" "
+            texto_cortado+=palavra
+        if tamanho_minimo == -1:
+            tamanho_minimo = tamanho_limite / 2
+        if len(texto_cortado) <= tamanho_minimo:
+            texto_cortado = texto[:tamanho_limite]
+        if reticencias:
+            texto_cortado += ' ...'
+        return texto_cortado
+
