@@ -161,7 +161,11 @@ class MailReplacer(object):
 
     @property
     def getTexto(self):
-        return self.context.getText()
+        texto_informe = self.context.getText()
+        url = 'http://sticonhecimento.tse.jus.br'
+        texto_informe_resolve = texto_informe.replace('resolveuid/', url + '/resolveuid/')
+        return texto_informe_resolve
+
         # pt = getToolByName(self.context, 'portal_transforms')
         # texto_plain_obj = pt.convertTo('text/plain', self.context.getText(), mimetype='text/html')
         # texto_plain = texto_plain_obj.getData().strip()
